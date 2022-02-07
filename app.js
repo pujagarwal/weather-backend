@@ -8,56 +8,62 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-//app.get('/v1/weather',get_weather_v1)
-//app.get('/v1/hello',get_hello)
+
+app.get('/v1/weather',get_weather_v1)
+app.get('/v1/hello',get_hello)
+app.post('/v1/auth',post_auth)
+
+
+
+function get_weather_v1(request, response) {
+    if(request.headers.authorization == "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlB1amEgQWdhcndhbCIsImlhdCI6MTUxNjIzOTAyMn0.1JUmoqILUT12T7nSeA6g-DQv4vYioNZva_JD5moSMoU")
+       response.json({"coord":{"lon":-123.262,"lat":44.5646},"weather":[{"id":800,"main":"Clear","description":"clear sky","icon":"01n"}],"base":"stations","main":{"temp":282.61,"feels_like":282.61,"temp_min":280.58,"temp_max":285.29,"pressure":1018,"humidity":84},"visibility":10000,"wind":{"speed":0.89,"deg":225,"gust":0.89},"clouds":{"all":0},"dt":1642038331,"sys":{"type":2,"id":2040223,"country":"US","sunrise":1642002454,"sunset":1642035291},"timezone":-28800,"id":5720727,"name":"Corvallis","cod":200})
+    response.json("Invalid")
+}
+
+function get_hello(req,res){
+    //res.set('content-type', 'application/json')
+    if(req.headers.authorization == "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlB1amEgQWdhcndhbCIsImlhdCI6MTUxNjIzOTAyMn0.1JUmoqILUT12T7nSeA6g-DQv4vYioNZva_JD5moSMoU")
+      res.json({"hello": "Hi I am Puja"})
+    res.json("Invalid")
+}
+// const fs = require("fs");
+
+function post_auth(req,res){
+    let usernames = ['Puja']
+    let passwords = ['123']
+    // const obj = JSON.parse(req.body)
+    let username = req.body.username
+    let pwd = req.body.password
+
+    if(usernames.includes(username)){
+      if(passwords.includes(pwd)){
+          res.json({
+            "access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlB1amEgQWdhcndhbCIsImlhdCI6MTUxNjIzOTAyMn0.1JUmoqILUT12T7nSeA6g-DQv4vYioNZva_JD5moSMoU",
+            "expires": new Date()
+          })
+      }
+  }
+}
 
 app.listen(3000)
 console.log('Node.js Express server is running on port 3000..')
-app.use(function(req, res, next) {
-    // Website you wish to allow to connect
-    const allowedOrigins = ['https://editor.swagger.io', 'https://hoppscotch.io'];
-    const origin = req.headers.origin;
     
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
-    
-    // Request methods you wish to allow eg: GET, POST, OPTIONS, PUT, PATCH, DELETE
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+    // fs.readFile("application.json", "utf8", (err, jsonString) => {
+    //     if (err) {
+    //       console.log("Error reading file from disk:", err);
+    //       return;
+    //     }
+    //     try {
+    //       const login = JSON.parse(jsonString);
+    //       //res.send(customer)
+    //       if(usernames.includes(login.username)){
+    //         if(passwords.includes(login.password)){
+    //             res.json({ "Sucess" : "Your API key is here: never-ever-reveal-your-token"})
+    //         }
+    //     }
 
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Pass to next layer of middleware
-    next();
-});
-
-app.get('/data/2.5/weather',get_weather)
-function get_weather(request, response) {
-     response.json({"coord":{"lon":-123.262,"lat":44.5646},"weather":[{"id":800,"main":"Clear","description":"clear sky","icon":"01n"}],"base":"stations","main":{"temp":282.61,"feels_like":282.61,"temp_min":280.58,"temp_max":285.29,"pressure":1018,"humidity":84},"visibility":10000,"wind":{"speed":0.89,"deg":225,"gust":0.89},"clouds":{"all":0},"dt":1642038331,"sys":{"type":2,"id":2040223,"country":"US","sunrise":1642002454,"sunset":1642035291},"timezone":-28800,"id":5720727,"name":"Corvallis","cod":200})
-}
-
-app.get("/v1/weather", get_weather2)
-function get_weather2(request, response) {
-     console.log('get_weather2 received req for v1 weather')
-     response.json({"coord":{"lon":-123.262,"lat":44.5646},"weather":[{"id":800,"main":"Clear","description":"clear sky","icon":"01n"}],"base":"stations","main":{"temp":282.61,"feels_like":282.61,"temp_min":280.58,"temp_max":285.29,"pressure":1018,"humidity":84},"visibility":10000,"wind":{"speed":0.89,"deg":225,"gust":0.89},"clouds":{"all":0},"dt":1642038331,"sys":{"type":2,"id":2040223,"country":"US","sunrise":1642002454,"sunset":1642035291},"timezone":-28800,"id":5720727,"name":"Corvallis","cod":200})
-}
-
-app.get("/v1/hello", get_hello)
-function get_hello(request, response) {
-     response.send('Hello!')
-}
-
-app.post("/v1/auth", post_auth)
-function post_auth(request, response) {
-     var usernames = "Puja"
-     var passwords = "123"
-     let username = request.body.username
-     let password = request.body.password
-    
-    if(usernames.includes(username)){
-          if(passwords.includes(password)){
-              response.json({ "Sucess" : "Your API key is here:154f5358852ed67eb577b88e2f735efc"})
-          }
-    }
-}
+    //     } catch (err) {
+    //       console.log("Error parsing JSON string:", err);
+    //     }
+    //   });
