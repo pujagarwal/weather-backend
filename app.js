@@ -57,7 +57,7 @@ function post_auth(request, response) {
     
     if(usernames.includes(username)){
           if(passwords.includes(password)){
-              response.json({ "Sucess" : "Your API key is here: 154f5358852ed67eb577b88e2f735efc"})
+              response.json({ "Sucess" : "Your API key is here:154f5358852ed67eb577b88e2f735efc"})
           }
     }
 }
