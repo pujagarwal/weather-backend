@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  description: "Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/)."
+  version: "1.0.0"
+  title: "Swagger WeatherMock Assignment4"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3000"
+basePath: "/v1"
+schemes:
+- "http"
+paths:
+  /weather:
+    get:
+      tags:
+      - "weather"
+      summary: "Find weather"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findmockweather"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Name"
+        in: "query" 
+        description: "Enter City"
+        required: true
+        type: "string"
+      - name: "API Key"  
+        in: "query"
+        description: "Enter API key"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
+        "400":
+          description: "Invalid API value"
+          
+  /hello:
+    get:
+      tags:
+      - "weather"
+      summary: "return a greeting"
+      description: "hfbdv"
+      operationId: "get_hello"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "You're welcome"
+        400:
+          description: "Bad request"
+  
+  /auth:
+    post:
+      tags:
+      - "weather"
+      summary: "Get your token"
+      description: ""
+      operationId: "userlogin"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "Details"
+        description: "Give your username and password"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "Token successfully generated"
+        400:
+          description: "Bad request"
+        401:
+          description: "You're not authorized"
+        
+          
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+        description: "Get Token"
+    xml:
+      name: "User"
